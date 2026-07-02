@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "name": "SeznamProvedenychAtestaciInformacnichKoncepci\\SeznamProvedenychAtestaciInformacnichKoncepci2009",
+    "description": "SeznamProvedenychAtestaciInformacnichKoncepci2009"
+  },
+  "request_config": {
+    "url": "https://www.dia.gov.cz/cs/nase-cinnosti/architektura-digitalnich-sluzeb-statu/atestace-a-akreditace/udelene-atesty-informacnich-systemu-verejne-spravy/rok-2009",
+    "method": "GET",
+    "timeout": 10,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  },
+  "data_extractor": {
+    "strategy": "extract_tables",
+    "output_format": "json"
+  }
+}

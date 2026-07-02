@@ -1,0 +1,16 @@
+{
+  "strategies_enum": {
+    "extract_tables": {
+      "display_name": "Stáhnout tabulky",
+      "description": "Vyhledá na stránce všechny tagy <table> a automaticky je převede na strukturovaný formát JSON bez nutnosti znát přesné názvy sloupců. Vhodné pro přehledy, registry a seznamy atestací."
+    },
+    "extract_text": {
+      "display_name": "Extrahovat čistý text",
+      "description": "Odstraní z HTML kódu navigační prvky, skripty, styly, záhlaví i patičky. Vrátí pouze souvislý plain text vhodný pro chunkování a indexaci do vektorové databáze pro AI chatbota."
+    },
+    "download_file": {
+      "display_name": "Stáhnout soubory",
+      "description": "Ignoruje parsování HTML a rovnou stáhne binární data z cílové URL adresy. Používá se pro fyzické stahování příloh, jako jsou PDF dokumenty, DOCX smlouvy nebo XLSX tabulky."
+    }
+  }
+}
