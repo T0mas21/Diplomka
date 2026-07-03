@@ -51,7 +51,7 @@ class Api():
         return {"configs": result}
     
 
-    @app.get("/get-content-by-configname")
+    @app.get("/get-content-by-configname/{config_name:path}")
     def get_by_configname(config_name: str):
         try:
             scrapper = ScrapperFactory.createScrapper(os.path.join("Config", f"{config_name}.json"))
