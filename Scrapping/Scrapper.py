@@ -5,7 +5,7 @@ import time
 import os
 
 from Enums.Strategies import ScrapperStrategy
-
+from Exceptions.ExceptionsHandler import ExceptionHandler
 
 class Scrapper:
 
@@ -51,12 +51,15 @@ class Scrapper:
     Download raw web content
     '''
     def downloadRawContent(self):
-        response = self.session.get(self.url, timeout=self.timeout)
-        response.raise_for_status()
-        
-        self.html_content = response.text
-        return self.html_content
-    
+        try:
+            response = self.session.get(self.url, timeout=self.timeout)
+            response.raise_for_status()
+            
+            self.html_content = response.text
+            return self.html_content
+        except Exception as e:
+            ExceptionHandler.handleException(e)
+
     '''
     STRATEGY 1: Exctrat table from downloaded webcontent
     '''
@@ -143,25 +146,28 @@ class Scrapper:
             print(f"Invalid or relative URL: {self.url}")
             return None
             
-        response = self.session.get(self.url, timeout=self.timeout, stream=True)
-        response.raise_for_status()
-        
-        # Determine the filename from URL
-        filename = self.url.split("/")[-1]
-        if not filename or "?" in filename:
-            filename = f"file_{int(time.time())}.pdf"
+        try:
+            response = self.session.get(self.url, timeout=self.timeout, stream=True)
+            response.raise_for_status()
             
-        if not os.path.exists(target_dir):
-            os.makedirs(target_dir)
-            
-        file_path = os.path.join(target_dir, filename)
-        
-        # Save file in binary chunks (prevents memory overloading for big files)
-        with open(file_path, "wb") as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
+            # Determine the filename from URL
+            filename = self.url.split("/")[-1]
+            if not filename or "?" in filename:
+                filename = f"file_{int(time.time())}.pdf"
                 
-        return file_path
+            if not os.path.exists(target_dir):
+                os.makedirs(target_dir)
+                
+            file_path = os.path.join(target_dir, filename)
+            
+            # Save file in binary chunks (prevents memory overloading for big files)
+            with open(file_path, "wb") as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    f.write(chunk)
+                    
+            return file_path
+        except Exception as e:
+            ExceptionHandler.handleException(e)
 
 
 

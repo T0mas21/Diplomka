@@ -5,6 +5,7 @@ from fastapi import FastAPI, HTTPException
 from Scrapping.ScrapperFactory import ScrapperFactory
 from Enums.Strategies import ScrapperStrategy
 
+from Exceptions.ExceptionsHandler import ExceptionHandler
 
 app = FastAPI()
 
@@ -44,33 +45,20 @@ class Api():
                         })
 
                     except Exception as e:
-                        # TODO replace with actual log
-                        # Pokud by byl nějaký soubor poškozený, zaznamenáme chybu a pokračujeme dál
-                        result.append({
-                            "file_name": file,
-                            "error": f"Nepodařilo se načíst soubor: {str(e)}"
-                        })
+                        ExceptionHandler.handleException(e)
+                        
                 
         return {"configs": result}
     
 
     @app.get("/get-content-by-configname")
     def get_by_configname(config_name: str):
+        try:
+            scrapper = ScrapperFactory.createScrapper(os.path.join("Config", f"{config_name}.json"))
 
-        scrapper = ScrapperFactory.createScrapper("Config\\" + config_name + ".json")
-
-        if scrapper is None:
-            raise HTTPException(
-                status_code=404, 
-                detail=f"Configuration name '{config_name}' was not found."
-            )
-        
-        try:            
             result = scrapper.getContentByStrategy()
             return {"status": "success", "data": result}
             
-        except ValueError as e:
-            # Chytí jak chybu z Enumu (neplatný string), tak z naší metody else větve
-            print(f"ERROR: {str(e)}")
-            raise HTTPException(status_code=400, detail=str(e))
+        except Exception as e:
+            ExceptionHandler.handleException(e)
 
